@@ -1,0 +1,121 @@
+@charset "UTF-8";
+/*example 01 : 类名嵌套*/
+.test1 {
+  font-size: .15rem;
+}
+.test1 p {
+  color: #333;
+}
+.test1 p .test11 {
+  width: 3px;
+}
+
+/*example 02 : 属性嵌套*/
+.test2 {
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+.test21 {
+  margin: 0 0 0 0;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+/*example 03 : 引用父选择器和精确定位父选择器和反向成为父选择器*/
+.a {
+  font-size: .15rem;
+}
+.a:hover {
+  color: red;
+}
+.a .ll {
+  color: black;
+}
+.a .ll:hover {
+  height: 20px;
+}
+.test3 .a {
+  width: 10px;
+}
+
+/*example 04 : 全局变量*/
+/*方法一*/
+.test4 {
+  color: red;
+}
+
+/*方法二*/
+.test41 {
+  color: red;
+}
+
+.test42 {
+  color: red;
+}
+
+/*example 05 : 带引号的字符串将被编译为不带引号的字符串*/
+.lili2 {
+  border-left: 1px #000 solid;
+  left: 20px;
+  top: 10px;
+}
+
+/*example 06 : 精讲除法*/
+/*需要注意:Sass 数学函数在算术运算期间会保留单位
+*可以将/解析为除法三种情况
+*(1)如果该值，或值的任何部分，存储在一个变量中或通过函数返回。
+* (2)如果该值是由括号括起来的，除非这些括号是在一个列表（list）外部，并且值是括号内部。
+* (3)如果该值被用作另一个算术表达式的一部分。
+*/
+p {
+  font-size: 10px/2px;
+  width: 50px;
+  height: 50px;
+  margin-left: 9px;
+}
+
+/*example 07 : 颜色运算*/
+.test7 {
+  color: #635343;
+}
+
+.test71 {
+  color: #020202;
+}
+
+.test72 {
+  color: rgba(1, 1, 1, 0.3);
+}
+
+/*如果想让alpha值变化,则需要计算函数*/
+.test73 {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/*example 08 : 字符串运算*/
+.test8 {
+  width: 5px;
+}
+
+.test81::after {
+  font-family: "arialblack";
+  content: lalalili;
+}
+
+.test82::before {
+  content: "wo ke yi 20 lili";
+}
+
+/*example 09 : 圆括号提升优先级*/
+.test9 {
+  width: 7px;
+}
+
+/*example 10 : 默认变量 !default*/
+/*如果分配给变量的值后面添加了!default标志 ，这意味着该变量如果已经赋值，那么它不会被重新赋值，但是，如果它尚未赋值，那么它会被赋予新的给定值。*/
+.test10 {
+  color: red;
+}
+
+/*# sourceMappingURL=test.css.map */
