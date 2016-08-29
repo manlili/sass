@@ -1,0 +1,251 @@
+@charset "UTF-8";
+/*example 01 : 导入外部文件,缺省文件后缀默认是sass/scss文件,一般在头部声明*/
+@import url(lili.css);
+@import "http://foo.com/bar";
+@import url(lili);
+@import "lili" screen;
+@import url("http://fonts.googleapis.com/css?family=family");
+.test1 {
+  color: black;
+}
+
+.test1 {
+  color: black;
+}
+
+.test11 {
+  color: deeppink;
+}
+
+/*但在以下情况下， 仅作为普通的 CSS @import 规则语句，不会导入任何 Sass 文件。
+*(1) 如果文件的扩展名是 .css。
+*(2) 如果文件名以 http:// 开始。
+*(3) 如果文件名是 url()
+*(4)如果@import 中包含任何的媒体查询（media queries)
+*/
+/*在import里面插入动态变量,但是仅适用于url方式*/
+/*导入scss文件,却不需要将它编译为css文件做法:
+ *(1)新建一个文件夹,为了将不需要编译的文件和需要编译的文件分开,这点千万注意
+ *(2)在已经建好的文件夹里面,将不要编译的*.scss文件命名为_*.scss
+ *(3)导入的时候不要用下划线,直接@import("新建文件夹名字/*.scss")
+ */
+/*example 02 : extend函数,不只继承类名选择器的样式,还继承与它相关的样式*/
+.test2, .lili {
+  border: 1px #f00;
+  background-color: #fdd;
+}
+
+.test2.test21, .test21.lili {
+  background-image: url("/image/hacked.png");
+}
+
+.test2 .test22, .lili .test22 {
+  background-image: url("/image/haha.png");
+}
+
+.lili {
+  border-width: 3px;
+}
+
+/*example 021 : extend函数,继承单元素选择器样式,同时继承与它相关的样式*/
+a:hover, .test3 {
+  color: green;
+}
+
+a.class1:hover, .class1.test3 {
+  height: 10px;
+}
+
+.test3 {
+  width: 20px;
+}
+
+/*example 022 : extend中链式扩展*/
+.test4, .test41, .test42 {
+  width: 20px;
+}
+
+.test41, .test42 {
+  height: 20px;
+}
+
+.test42 {
+  top: 20px;
+}
+
+/*example 023 : extend中占位符%,%不会被编译到css里面*/
+.test5 a.lili {
+  width: 100px;
+}
+
+.lili {
+  height: 200%;
+}
+
+/*example 024 : extend中防止继承不存在的样式出错,用!optional直接跳过空样式*/
+.test6 {
+  height: 100px;
+}
+
+/*example 03 : @at-root指令导致一个或多个规则被限定输出在文档的根层级上，而不是被嵌套在其父选择器下*/
+.test7 {
+  height: 20px;
+}
+.children1 {
+  color: red;
+}
+
+.children2 {
+  color: black;
+}
+
+/*example 031 : @at-root(without:类名)将选择器移动到嵌套指令之外*/
+@media name {
+  .page {
+    width: 8px;
+  }
+}
+.page {
+  color: red;
+}
+
+/*example 04 : if条件判断,注意不支持if...else...*/
+.test8 {
+  width: 20px;
+}
+
+.test81 {
+  width: 100px;
+}
+
+.test82 {
+  width: 10px;
+}
+
+/*example 05 : for循环语句*/
+.gray3 {
+  color: #333333;
+}
+
+.gray6 {
+  color: #666666;
+}
+
+.gray9 {
+  color: #999999;
+}
+
+.gray23 {
+  color: #333333;
+}
+
+.gray26 {
+  color: #666666;
+}
+
+.gray29 {
+  color: #999999;
+}
+
+/*example 05 : each循环语句  @each $var in <list or map>*/
+test9.lili {
+  width: 10px;
+}
+
+test9.yaya {
+  width: 10px;
+}
+
+test9.sansa {
+  width: 10px;
+}
+
+test9.name21 lili {
+  width: 10px;
+}
+
+test9.name22 yaya {
+  width: 10px;
+}
+
+test9.name23 sansa {
+  width: 10px;
+}
+
+test9.name31 {
+  width: 10px;
+}
+
+test9.name32 {
+  width: 20px;
+}
+
+test9.name33 {
+  width: 30px;
+}
+
+/*example 06 : while循环语句 */
+.gray3 {
+  color: #999999;
+}
+
+.gray2 {
+  color: #666666;
+}
+
+.gray1 {
+  color: #333333;
+}
+
+/*example 07 : 混入指令,实现代码块复用*/
+.test10 {
+  float: left;
+}
+
+.test101 {
+  float: left;
+}
+
+.test102 {
+  float: left;
+}
+.test102 .lili {
+  width: 100px;
+}
+
+.test103 .lili {
+  width: "1px";
+  height: "2px";
+  top: "3px";
+}
+
+.test104 {
+  float: right;
+}
+
+.shadows {
+  -moz-box-shadow: 0px 4px 5px #666, 2px 6px 10px #999;
+  -webkit-box-shadow: 0px 4px 5px #666, 2px 6px 10px #999;
+  box-shadow: 0px 4px 5px #666, 2px 6px 10px #999;
+}
+
+/*example 71 : 传递内容块@content到混入,传递到@content位置*/
+html {
+  color: #888;
+}
+html .logo {
+  font-size: 15px;
+}
+
+/*example 72 : 变量在混入@mixin的作用域,即传递给混入（mixin）的内容块在其被定义的作用域中进行运算，而不是混入（mixin）的作用域。这意味着混入（mixin）的局部变量不能传递给样式块使用*/
+.test12 {
+  background-color: black;
+  color: white;
+}
+
+/*example 8 : 函数*/
+.test13 {
+  font-size: 15px;
+}
+
+/*# sourceMappingURL=test.css.map */

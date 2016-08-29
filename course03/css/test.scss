@@ -1,0 +1,265 @@
+@charset "UTF-8";
+
+/*example 01 : 导入外部文件,缺省文件后缀默认是sass/scss文件,一般在头部声明*/
+@import "lili.scss";  //导入一个文件
+@import "lili.scss", "haha.scss"; //导入两个文件 
+/*但在以下情况下， 仅作为普通的 CSS @import 规则语句，不会导入任何 Sass 文件。
+*(1) 如果文件的扩展名是 .css。
+*(2) 如果文件名以 http:// 开始。
+*(3) 如果文件名是 url()
+*(4)如果@import 中包含任何的媒体查询（media queries)
+*/
+@import "lili.css";
+@import "http://foo.com/bar";
+@import url(lili);
+@import "lili" screen;
+
+/*在import里面插入动态变量,但是仅适用于url方式*/
+$name:family;
+@import url("http://fonts.googleapis.com/css?family=#{$name}");
+
+/*导入scss文件,却不需要将它编译为css文件做法:
+ *(1)新建一个文件夹,为了将不需要编译的文件和需要编译的文件分开,这点千万注意
+ *(2)在已经建好的文件夹里面,将不要编译的*.scss文件命名为_*.scss
+ *(3)导入的时候不要用下划线,直接@import("新建文件夹名字/*.scss")
+ */
+
+/*example 02 : extend函数,不只继承类名选择器的样式,还继承与它相关的样式*/
+.test2 {
+  border: 1px #f00;
+  background-color: #fdd;
+}
+.test2.test21 {
+  background-image: url("/image/hacked.png");
+}
+.test2 .test22 {
+  background-image: url("/image/haha.png");
+}
+.lili {
+  @extend .test2;
+  border-width: 3px;
+} 
+
+/*example 021 : extend函数,继承单元素选择器样式,同时继承与它相关的样式*/
+a:hover {
+    color: green;
+}
+a.class1:hover {
+    height: 10px;
+}
+.test3 {
+    @extend a:hover;
+    width: 20px;
+}
+
+/*example 022 : extend中链式扩展*/
+.test4 {
+    width:20px;
+}
+.test41 {
+    @extend .test4;
+    height: 20px;
+}
+.test42 {
+    @extend .test41;
+    top:20px;
+}
+
+/*example 023 : extend中占位符%,%不会被编译到css里面*/
+.test5 a%name {
+    width: 100px;
+}
+.lili {
+    height: 200%;
+    @extend %name;
+}
+
+/*example 024 : extend中防止继承不存在的样式出错,用!optional直接跳过空样式*/
+.test6 {
+    @extend noexist!optional;
+    height: 100px;
+}
+
+/*example 03 : @at-root指令导致一个或多个规则被限定输出在文档的根层级上，而不是被嵌套在其父选择器下*/
+.test7 {
+    height: 20px;
+    @at-root {
+        .children1 {
+            color: red;
+        }
+        .children2 {
+            color: black;
+        }
+    }
+}
+
+/*example 031 : @at-root(without:类名)将选择器移动到嵌套指令之外*/
+@media name {
+  .page {
+    width: 8px;
+    @at-root (without: media) {  //注意此处目前测试是不支持类名的,比如.test8
+      color: red;
+    }
+  }
+}
+
+/*example 04 : if条件判断,注意不支持if...else...*/
+.test8 {   //if...if..
+    @if 1+1 == 2 {
+        width: 20px;
+    }
+    @if 5 < 3 {
+        width: 100px;
+    }
+}
+.test81 {  //if...else if...
+    @if 1+1 != 2 {
+        width: 20px;
+    }
+    @else if 5 > 3 {
+        width: 100px;
+    }
+}
+.test82 {  //if...else if...else...
+    @if 1+1 != 2 {
+        width: 20px;
+    }
+    @else if 5 < 3 { 
+        width: 100px;
+    }
+    @else {
+        width: 10px;
+    }
+}
+
+/*example 05 : for循环语句*/
+//第一种格式 @for $var from <start> through <end>,注意范围包括<start>和<end>的值
+@for $i from 1 through 3 {
+    .gray#{$i*3} {
+        color: #333*$i; 
+    }
+}
+
+//第二种格式 @for $var from <start> to <end>,注意范围从<start>开始运行，但不包括<end>的值
+@for $i from 1 to 4 {
+    .gray2#{$i*3} {
+        color: #333*$i; 
+    }
+}
+
+/*example 05 : each循环语句  @each $var in <list or map>*/
+$name:"lili","yaya","sansa";  //注意数组list的写法
+@each $i in $name {
+    test9.#{$i} {
+        width: 10px;
+    }
+}
+
+$name2:(name21:"lili",name22:"yaya",name23:"sansa");  //注意对象map的写法
+@each $i in $name2 {
+    test9.#{$i} {
+        width: 10px;
+    }
+}
+
+$name3:(name31:1,name32:2,name33:3);  //注意对象map的写法
+@each $key,$value in $name3 {
+    test9.#{$key} {
+        width: 10px*$value;
+    }
+}
+
+/*example 06 : while循环语句 */
+$i:3;
+@while $i > 0 {
+    .gray#{$i} {
+        color: #333*$i;
+    }
+    $i:$i - 1; //注意此处不能写成$i:$i-1,因为会被当成字符串
+}
+
+/*example 07 : 混入指令,实现代码块复用*/
+@mixin left01 {  //不带参数
+    float: left;
+}
+.test10 {
+    @include left01; 
+}
+
+@mixin left02($left) {  //带1个参数
+    float: $left;
+}
+.test101 {
+    @include left02(left); 
+}
+
+@mixin left03($left,$width) {  //带2个参数,或者说参数为数组
+    float: $left;
+    .lili {
+        width: $width;
+    }
+}
+.test102 {
+    @include left03(left,100px); 
+}
+
+@mixin left04($name31,$name32,$name33) {  //参数为对象,但是接受传递的参数必须是对象相对应key,同时需要用...传递参数
+    .lili {
+        width: $name31;
+        height: $name32;
+        top: $name33;
+    }
+}
+$map:(name31:"1px",name32:"2px",name33:"3px");
+.test103 {
+    @include left04($map...); 
+}
+
+@mixin left05($left:right) {  //带默认参数,不传参的话就用默认参数
+    float: $left;
+}
+.test104 {
+    @include left05; 
+}
+
+@mixin box-shadow($shadows...) {  //不定参数,用...
+      -moz-box-shadow: $shadows;
+      -webkit-box-shadow: $shadows;
+      box-shadow: $shadows;
+}
+.shadows {
+  @include box-shadow(0px 4px 5px #666, 2px 6px 10px #999);
+}
+
+/*example 71 : 传递内容块@content到混入,传递到@content位置*/
+@mixin lala {
+    html {
+        color: #888;
+        @content;
+    }
+}
+@include lala {
+    .logo {
+        font-size: 15px;
+    }
+}
+
+/*example 72 : 变量在混入@mixin的作用域,即传递给混入（mixin）的内容块在其被定义的作用域中进行运算，而不是混入（mixin）的作用域。这意味着混入（mixin）的局部变量不能传递给样式块使用*/
+$color: white;
+@mixin haha($color:black) {
+    background-color: $color;
+    @content;
+}
+.test12 {
+    @include haha{
+        color: $color;
+    }
+}
+
+/*example 8 : 函数*/
+@function sasa($name) {
+    @return $name;
+}
+.test13 {
+    font-size: sasa(15px);
+}
