@@ -24,7 +24,7 @@ $name:family;
  *(3)导入的时候不要用下划线,直接@import("新建文件夹名字/*.scss")
  */
 
-/*example 02 : extend函数,不只继承类名选择器的样式,还继承与它相关的样式*/
+/*example 02 : extend函数,不只继承类名选择器的样式,还继承与它相关的样式,包括继承它的父选择器*/
 .test2 {
   border: 1px #f00;
   background-color: #fdd;
@@ -35,17 +35,23 @@ $name:family;
 .test2 .test22 {
   background-image: url("/image/haha.png");
 }
+html .test2 {
+  width: 100px;
+}
 .lili {
   @extend .test2;
   border-width: 3px;
 } 
 
-/*example 021 : extend函数,继承单元素选择器样式,同时继承与它相关的样式*/
+/*example 021 : extend函数,继承单元素选择器样式,同时继承与它相关的样式,包括继承它的父选择器*/
 a:hover {
     color: green;
 }
 a.class1:hover {
     height: 10px;
+}
+html a:hover {
+    width: 10px;
 }
 .test3 {
     @extend a:hover;
@@ -94,13 +100,15 @@ a.class1:hover {
 }
 
 /*example 031 : @at-root(without:类名)将选择器移动到嵌套指令之外*/
-@media name {
-  .page {
-    width: 8px;
-    @at-root (without: media) {  //注意此处目前测试是不支持类名的,比如.test8
-      color: red;
+.gaga {
+    @media name {
+      .page {
+        width: 8px;
+        @at-root (without: media) {  //注意此处目前测试是不支持类名的,比如.test8
+          color: red;
+        }
+      }
     }
-  }
 }
 
 /*example 04 : if条件判断,注意不支持if...else...*/
@@ -147,7 +155,7 @@ a.class1:hover {
     }
 }
 
-/*example 05 : each循环语句  @each $var in <list or map>*/
+/*example 06 : each循环语句  @each $var in <list or map>*/
 $name:"lili","yaya","sansa";  //注意数组list的写法
 @each $i in $name {
     test9.#{$i} {
@@ -169,7 +177,7 @@ $name3:(name31:1,name32:2,name33:3);  //注意对象map的写法
     }
 }
 
-/*example 06 : while循环语句 */
+/*example 07 : while循环语句 */
 $i:3;
 @while $i > 0 {
     .gray#{$i} {
@@ -178,7 +186,7 @@ $i:3;
     $i:$i - 1; //注意此处不能写成$i:$i-1,因为会被当成字符串
 }
 
-/*example 07 : 混入指令,实现代码块复用*/
+/*example 08 : 混入指令,实现代码块复用*/
 @mixin left01 {  //不带参数
     float: left;
 }
@@ -231,20 +239,20 @@ $map:(name31:"1px",name32:"2px",name33:"3px");
   @include box-shadow(0px 4px 5px #666, 2px 6px 10px #999);
 }
 
-/*example 71 : 传递内容块@content到混入,传递到@content位置*/
+/*example 81 : 传递内容块@content到混入,传递到@content位置*/
 @mixin lala {
     html {
         color: #888;
         @content;
     }
 }
-@include lala {
+@include lala {  //此处名字必须和上面保持一致
     .logo {
         font-size: 15px;
     }
 }
 
-/*example 72 : 变量在混入@mixin的作用域,即传递给混入（mixin）的内容块在其被定义的作用域中进行运算，而不是混入（mixin）的作用域。这意味着混入（mixin）的局部变量不能传递给样式块使用*/
+/*example 82 : 变量在混入@mixin的作用域,即传递给混入（mixin）的内容块在其被定义的作用域中进行运算，而不是混入（mixin）的作用域。这意味着混入（mixin）的局部变量不能传递给样式块使用*/
 $color: white;
 @mixin haha($color:black) {
     background-color: $color;
@@ -256,7 +264,7 @@ $color: white;
     }
 }
 
-/*example 8 : 函数*/
+/*example 9 : 函数*/
 @function sasa($name) {
     @return $name;
 }

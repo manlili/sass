@@ -29,7 +29,7 @@
  *(2)在已经建好的文件夹里面,将不要编译的*.scss文件命名为_*.scss
  *(3)导入的时候不要用下划线,直接@import("新建文件夹名字/*.scss")
  */
-/*example 02 : extend函数,不只继承类名选择器的样式,还继承与它相关的样式*/
+/*example 02 : extend函数,不只继承类名选择器的样式,还继承与它相关的样式,包括继承它的父选择器*/
 .test2, .lili {
   border: 1px #f00;
   background-color: #fdd;
@@ -43,17 +43,25 @@
   background-image: url("/image/haha.png");
 }
 
+html .test2, html .lili {
+  width: 100px;
+}
+
 .lili {
   border-width: 3px;
 }
 
-/*example 021 : extend函数,继承单元素选择器样式,同时继承与它相关的样式*/
+/*example 021 : extend函数,继承单元素选择器样式,同时继承与它相关的样式,包括继承它的父选择器*/
 a:hover, .test3 {
   color: green;
 }
 
 a.class1:hover, .class1.test3 {
   height: 10px;
+}
+
+html a:hover, html .test3 {
+  width: 10px;
 }
 
 .test3 {
@@ -101,11 +109,11 @@ a.class1:hover, .class1.test3 {
 
 /*example 031 : @at-root(without:类名)将选择器移动到嵌套指令之外*/
 @media name {
-  .page {
+  .gaga .page {
     width: 8px;
   }
 }
-.page {
+.gaga .page {
   color: red;
 }
 
@@ -147,7 +155,7 @@ a.class1:hover, .class1.test3 {
   color: #999999;
 }
 
-/*example 05 : each循环语句  @each $var in <list or map>*/
+/*example 06 : each循环语句  @each $var in <list or map>*/
 test9.lili {
   width: 10px;
 }
@@ -184,7 +192,7 @@ test9.name33 {
   width: 30px;
 }
 
-/*example 06 : while循环语句 */
+/*example 07 : while循环语句 */
 .gray3 {
   color: #999999;
 }
@@ -197,7 +205,7 @@ test9.name33 {
   color: #333333;
 }
 
-/*example 07 : 混入指令,实现代码块复用*/
+/*example 08 : 混入指令,实现代码块复用*/
 .test10 {
   float: left;
 }
@@ -229,7 +237,7 @@ test9.name33 {
   box-shadow: 0px 4px 5px #666, 2px 6px 10px #999;
 }
 
-/*example 71 : 传递内容块@content到混入,传递到@content位置*/
+/*example 81 : 传递内容块@content到混入,传递到@content位置*/
 html {
   color: #888;
 }
@@ -237,13 +245,13 @@ html .logo {
   font-size: 15px;
 }
 
-/*example 72 : 变量在混入@mixin的作用域,即传递给混入（mixin）的内容块在其被定义的作用域中进行运算，而不是混入（mixin）的作用域。这意味着混入（mixin）的局部变量不能传递给样式块使用*/
+/*example 82 : 变量在混入@mixin的作用域,即传递给混入（mixin）的内容块在其被定义的作用域中进行运算，而不是混入（mixin）的作用域。这意味着混入（mixin）的局部变量不能传递给样式块使用*/
 .test12 {
   background-color: black;
   color: white;
 }
 
-/*example 8 : 函数*/
+/*example 9 : 函数*/
 .test13 {
   font-size: 15px;
 }
